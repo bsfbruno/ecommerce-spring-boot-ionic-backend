@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.bruno.ecommerce.domain.Categoria;
 import br.com.bruno.ecommerce.repository.CategoriaRepository;
+import br.com.bruno.ecommerce.service.exception.ObjectNotFoundException;
 
 @Service
 public class CategoriaService {
@@ -14,8 +15,9 @@ public class CategoriaService {
 	@Autowired
 	private CategoriaRepository repo;
 
-	public Categoria buscar(Integer id) {
+	public Categoria find(Integer id) {
 		Optional<Categoria> obj = repo.findById(id);
-		return obj.orElse(null);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getName()));
 	}
 }
