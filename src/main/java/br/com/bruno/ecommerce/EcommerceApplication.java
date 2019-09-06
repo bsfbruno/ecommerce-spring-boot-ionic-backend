@@ -13,6 +13,7 @@ import br.com.bruno.ecommerce.domain.Cidade;
 import br.com.bruno.ecommerce.domain.Cliente;
 import br.com.bruno.ecommerce.domain.Endereco;
 import br.com.bruno.ecommerce.domain.Estado;
+import br.com.bruno.ecommerce.domain.ItemPedido;
 import br.com.bruno.ecommerce.domain.Pagamento;
 import br.com.bruno.ecommerce.domain.PagamentoComBoleto;
 import br.com.bruno.ecommerce.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import br.com.bruno.ecommerce.repository.CidadeRepository;
 import br.com.bruno.ecommerce.repository.ClienteRepository;
 import br.com.bruno.ecommerce.repository.EnderecoRepository;
 import br.com.bruno.ecommerce.repository.EstadoRepository;
+import br.com.bruno.ecommerce.repository.ItemPedidoRepository;
 import br.com.bruno.ecommerce.repository.PagamentoRepository;
 import br.com.bruno.ecommerce.repository.PedidoRepository;
 import br.com.bruno.ecommerce.repository.ProdutoRepository;
@@ -55,6 +57,9 @@ public class EcommerceApplication implements CommandLineRunner{
 
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(EcommerceApplication.class, args);
@@ -118,5 +123,18 @@ public class EcommerceApplication implements CommandLineRunner{
 
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pgto1, pgto2));
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 	}
 }

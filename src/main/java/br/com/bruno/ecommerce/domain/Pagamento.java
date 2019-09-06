@@ -25,7 +25,7 @@ public abstract class Pagamento implements Serializable{
 
 	@OneToOne
 	@JoinColumn(name = "pedido_id")
-	//a anotaçao abaixo faz com que o id do pagamento seja o mesmo do pedido
+	//a anotaçao abaixo faz com que o id do pagamento seja sua chave primária
 	@MapsId
 	private Pedido pedido;
 
