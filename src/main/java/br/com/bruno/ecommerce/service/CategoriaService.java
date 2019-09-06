@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import br.com.bruno.ecommerce.domain.Categoria;
+import br.com.bruno.ecommerce.dto.CategoriaDTO;
 import br.com.bruno.ecommerce.repository.CategoriaRepository;
 import br.com.bruno.ecommerce.service.exception.DataIntegrityExcpetion;
 import br.com.bruno.ecommerce.service.exception.ObjectNotFoundException;
@@ -52,5 +53,9 @@ public class CategoriaService {
 	public Page<Categoria> findPage(Integer page /*número da página que vai ser carregada*/, Integer linesPerPage /*número de linhas que serão retornados*/, String orderBy /*tipo de ordenação*/, String direction /*ascendente ou descendente*/) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repo.findAll(pageRequest);
+	}
+	
+	public Categoria fromDTO(CategoriaDTO obj) {
+		return new Categoria(obj.getId(), obj.getNome());
 	}
 }
