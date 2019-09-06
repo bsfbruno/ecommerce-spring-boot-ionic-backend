@@ -1,5 +1,6 @@
 package br.com.bruno.ecommerce.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +40,9 @@ public class CategoriaService {
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityExcpetion("Não é possível excluir uma categoria que possui produtos!");
 		}		
+	}
+	
+	public List<Categoria> findAll() {
+		return repo.findAll();
 	}
 }
