@@ -14,11 +14,14 @@ import org.springframework.stereotype.Service;
 import br.com.bruno.ecommerce.domain.Cidade;
 import br.com.bruno.ecommerce.domain.Cliente;
 import br.com.bruno.ecommerce.domain.Endereco;
+import br.com.bruno.ecommerce.domain.enums.Perfil;
 import br.com.bruno.ecommerce.domain.enums.TipoCliente;
 import br.com.bruno.ecommerce.dto.ClienteDTO;
 import br.com.bruno.ecommerce.dto.ClienteNewDTO;
 import br.com.bruno.ecommerce.repository.ClienteRepository;
 import br.com.bruno.ecommerce.repository.EnderecoRepository;
+import br.com.bruno.ecommerce.security.UserSS;
+import br.com.bruno.ecommerce.service.exception.AuthorizationException;
 import br.com.bruno.ecommerce.service.exception.DataIntegrityExcpetion;
 import br.com.bruno.ecommerce.service.exception.ObjectNotFoundException;
 
@@ -35,6 +38,11 @@ public class ClienteService {
 	private BCryptPasswordEncoder pe;
 
 	public Cliente find(Integer id) {
+		UserSS user = UserService.authenticated();
+		if (user==null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		
 		Optional<Cliente> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! Id: " + id +
 				", Tipo: " + Cliente.class.getName()));
